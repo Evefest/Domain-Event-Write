@@ -1,3 +1,3 @@
-module github.com/Evefest/Domain-Event-Write
+module github.com/Evefest/domainEventWrite
 
 go 1.18
