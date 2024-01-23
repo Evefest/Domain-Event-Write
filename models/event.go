@@ -26,7 +26,6 @@ type Event struct {
 	SubscribedUsers []string  `json:"SubscribedUsers"`
 	CreatedAt       time.Time `json:"CreatedAt"`
 	UpdateAt        time.Time `json:"UpdateAt"`
-	DisabledAt      time.Time `json:"DisabledAt"`
 }
 
 func (event *Event) SetOnCreated() {
@@ -53,9 +52,9 @@ func (event *Event) SetOnUpdated(eventUpdated Event) {
 	event.setUpdatedDate()
 }
 
-func (event *Event) DisableEvent() {
-	event.IsPublic = false
-	event.DisabledAt = time.Now()
+func (event *Event) ChangeVisibility() {
+	event.IsPublic = !event.IsPublic
+	event.setUpdatedDate()
 }
 
 func (event *Event) SubscribeUser(userId string) bool {

@@ -35,12 +35,12 @@ func UpdateEvent(eventId string, event models.Event) (models.Event, exceptions.R
 	return eventUpdated, exceptions.Response{}
 }
 
-func DisableEvent(eventId string) exceptions.Response {
+func ChangeEventVisibility(eventId string) exceptions.Response {
 	eventFound, errFindingEvent := findEventById(eventId)
 	if errFindingEvent.ErrorCode != 0 {
 		return errFindingEvent
 	}
-	eventFound.DisableEvent()
+	eventFound.ChangeVisibility()
 	_, err := repositories.Update(eventFound)
 	if err != nil {
 		log.Printf(constants.ErrorUpdatingEvent, err.Error())
