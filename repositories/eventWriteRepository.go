@@ -8,6 +8,8 @@ type EventRepository interface {
 	Create(event models.Event) (models.Event, error)
 	FindById(eventId string) (models.Event, error)
 	Update(event models.Event) (models.Event, error)
+	ExistsCategoryById(categoryId string) bool
+	ExistsLocationById(locationId string) bool
 }
 
 var eventRepository EventRepository
@@ -26,4 +28,12 @@ func FindById(eventId string) (models.Event, error) {
 
 func Update(event models.Event) (models.Event, error) {
 	return eventRepository.Update(event)
+}
+
+func ExistsCategoryById(categoryId string) bool {
+	return eventRepository.ExistsCategoryById(categoryId)
+}
+
+func ExistsLocationById(locationId string) bool {
+	return eventRepository.ExistsLocationById(locationId)
 }

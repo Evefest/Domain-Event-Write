@@ -11,6 +11,9 @@ import (
 )
 
 func CreateEvent(event models.Event) (models.Event, exceptions.Response) {
+	if exception := validateCategoryAndLocation(event.CategoryID, event.LocationID); exception.ErrorCode != 0 {
+		return models.Event{}, exception
+	}
 	event.SetOnCreated()
 	createdEvent, err := repositories.Create(event)
 	if err != nil {
@@ -22,6 +25,9 @@ func CreateEvent(event models.Event) (models.Event, exceptions.Response) {
 }
 
 func UpdateEvent(eventId string, event models.Event) (models.Event, exceptions.Response) {
+	if exception := validateCategoryAndLocation(event.CategoryID, event.LocationID); exception.ErrorCode != 0 {
+		return models.Event{}, exception
+	}
 	eventFound, errFindingEvent := findEventById(eventId)
 	if errFindingEvent.ErrorCode != 0 {
 		return models.Event{}, errFindingEvent
@@ -88,4 +94,13 @@ func findEventById(eventId string) (models.Event, exceptions.Response) {
 		return models.Event{}, exceptions.Response{}.Create(400, fmt.Sprintf(constants.EventNotFound, eventId))
 	}
 	return eventFound, exceptions.Response{}
+}
+
+func validateCategoryAndLocation(categoryId string, locationId string) exceptions.Response {
+	if !repositories.ExistsCategoryById(categoryId) {
+		return exceptions.Response{}.Create(400, constants.InvalidCategoryId)
+	} else if !repositories.ExistsLocationById(locationId) {
+		return exceptions.Response{}.Create(400, constants.InvalidLocationId)
+	}
+	return exceptions.Response{}
 }
